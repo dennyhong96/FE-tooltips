@@ -6,6 +6,7 @@ import "../sass/main.scss";
 // DOM Elements
 const tooltips = document.querySelectorAll(".tooltips .tooltip");
 const section = document.querySelector(".section");
+const container = document.querySelector(".container");
 
 function positionToolitp() {
   tooltips.forEach((tooltip) => {
@@ -16,15 +17,18 @@ function positionToolitp() {
     // pin.getBoundingClientRect().left is relative to viewport
     // pin.offsetLeft is relative to it's parent
 
-    const tooltipRightBound = pin.offsetLeft + pin.offsetWidth / 2 + content.offsetWidth / 2;
+    const tooltipRightBound =
+      container.offsetLeft + pin.offsetLeft + pin.offsetWidth / 2 + content.offsetWidth / 2;
     const sectionRightBound = section.offsetWidth;
     const pinLeftBount = pin.getBoundingClientRect().left;
 
     // If tooltip content is out of screen to the right side
     if (tooltipRightBound > sectionRightBound) {
       console.log("Right conflict");
-      const extraLeft = sectionRightBound - tooltipRightBound;
-      content.style.left = `${pin.offsetLeft - content.offsetWidth / 2 + extraLeft}px`;
+      const extraLeft = tooltipRightBound - sectionRightBound;
+      content.style.left = `${
+        pin.offsetLeft + pin.offsetWidth / 2 - content.offsetWidth / 2 - extraLeft
+      }px`;
     }
     // If tooltip content is out of screen to the left side
     else if (pinLeftBount < content.offsetWidth / 2) {
@@ -34,6 +38,7 @@ function positionToolitp() {
     }
     // Tooltip content is within the viewport
     else {
+      console.log("Tooltip fit screen");
       content.style.left = `${pin.offsetLeft - content.offsetWidth / 2}px`;
     }
 
