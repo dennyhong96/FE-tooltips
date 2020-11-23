@@ -51,7 +51,6 @@
       width: 100%;
       background-color: #fff;
       border-radius: 50%;
-
       animation: pulse 1s ease-in-out infinite;
     }
   }
@@ -74,14 +73,14 @@
     box-shadow: 0 0 15px rgba(#000, 0.1);
     padding: 3rem;
     border-radius: 8px;
-    width: 90vw;
-    // width: 100%;
+    width: 100%;
     max-width: 300px;
+    z-index: 2;
 
-    opacity: 0; // **************************************
+    // Hide
+    opacity: 0;
     pointer-events: none;
-
-    transition: opacity 0.2s;
+    transition: opacity 0.3s ease-in-out;
 
     &--active {
       opacity: 1;
@@ -179,6 +178,11 @@
     .tooltip__pin {
       top: 40%;
       left: 10%;
+
+      @media only screen and (max-width: 768px) {
+        width: 10px;
+        height: 10px;
+      }
     }
   }
 
@@ -186,6 +190,11 @@
     .tooltip__pin {
       top: 70%;
       left: 45%;
+
+      @media only screen and (max-width: 768px) {
+        width: 10px;
+        height: 10px;
+      }
     }
   }
 }
