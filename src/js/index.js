@@ -45,7 +45,8 @@ function positionToolitp() {
 positionToolitp();
 ["load", "resize"].forEach((evt) => window.addEventListener(evt, positionToolitp));
 
-let tooltipTimeoutId;
+// Used to track each tooltip's timeout
+const tooltipTimtoutIdMap = {};
 
 // Add listeners to tooltips
 tooltips.forEach((tooltip) => {
@@ -54,9 +55,17 @@ tooltips.forEach((tooltip) => {
 
   // Mouse moves over on pin or tooltip
   [pin, content].forEach((el) =>
-    el.addEventListener("mouseover", function () {
-      // If tooltip has a close timeout, clears it
-      if (tooltipTimeoutId) clearTimeout(tooltipTimeoutId);
+    el.addEventListener("mouseover", function (evt) {
+      // Gets the tooltip and uses data-tooltip-id as key for tooltipTimtoutIdMap
+      const tooltip = evt.target.closest(".tooltip");
+      if (!tooltip) return;
+      const tooltipId = tooltip.dataset.tooltipId;
+
+      // If this tooltip has a close timeout, clears it
+      if (tooltipTimtoutIdMap[tooltipId]) {
+        clearTimeout(tooltipTimtoutIdMap[tooltipId]);
+        tooltipTimtoutIdMap[tooltipId] = undefined;
+      }
 
       // Open the tooltip
       content.classList.add("tooltip__content--active");
@@ -65,9 +74,14 @@ tooltips.forEach((tooltip) => {
 
   // Mouse moves out on pin or tooltip
   [pin, content].forEach((el) =>
-    el.addEventListener("mouseout", function () {
+    el.addEventListener("mouseout", function (evt) {
+      // Gets the tooltip and uses data-tooltip-id as key for tooltipTimtoutIdMap
+      const tooltip = evt.target.closest(".tooltip");
+      if (!tooltip) return;
+      const tooltipId = tooltip.dataset.tooltipId;
+
       // Close tooltip in 1 second
-      tooltipTimeoutId = setTimeout(() => {
+      tooltipTimtoutIdMap[tooltipId] = setTimeout(() => {
         content.classList.remove("tooltip__content--active");
       }, 1000);
     })
